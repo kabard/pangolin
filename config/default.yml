@@ -1,0 +1,7 @@
+
+plugins:
+  - ./plugins/logger
+  - ./plugins/swagger
+  - ./plugins/externals
+
+port: 3000
