@@ -1,7 +1,12 @@
 
 plugins:
+  - ./plugins/mongo
   - ./plugins/logger
   - ./plugins/swagger
   - ./plugins/externals
+  - ./plugins/proxy
 
 port: 3000
+
+mongodb:
+  url: 'mongodb://localhost:27017/ate_way'
