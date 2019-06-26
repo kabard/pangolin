@@ -31,17 +31,17 @@ export class ProxyApi {
             // All the Authentication and middleware should be added here.
             // The Proxy action should also come from database!
             Troute(eachProxy.base_path, async (ctx: any) => {
-                axios({
-                    method: eachProxy.method,
-                    url : `${eachBasePath.remoteUrl}${eachProxy.remote_path}`
-                }).then((response) => {
-                    console.log(response);
-                    ctx.body = response.data;
-                })
-                .catch((error) => {
-                    console.log(error);
-                    ctx.body = error.response.data;
-                });
+                try {
+                    console.log(`${eachBasePath.remoteUrl}${eachProxy.remote_path}`);
+                    const response = await axios({
+                        method: eachProxy.method,
+                        url : `${eachBasePath.remoteUrl}${eachProxy.remote_path}`
+                    });
+                    ctx.response.body = response.data;
+                }
+                catch (error) {
+                    ctx.response.body = error.response.data;
+                }
             });
         });
     }
