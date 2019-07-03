@@ -4,9 +4,15 @@ plugins:
   - ./plugins/logger
   - ./plugins/swagger
   - ./plugins/externals
+  - ./plugins/redis-session
   - ./plugins/proxy
 
 port: 3000
 
+Redis:
+  URL: 'localhost:6379'
+  nodes:
+    - 'localhost:6379'
+  key: 'koa:sess'
 mongodb:
   url: 'mongodb://localhost:27017/ate_way'
