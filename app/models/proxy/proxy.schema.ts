@@ -24,7 +24,8 @@ export class ProxyRoutes {
             remoteUrl: { type: String, required: true },
             routes: { type: Array, required: true },
             policy: {type: String, required: false},
-            creation_date: { type: Date, default: Date.now }
+            creation_date: { type: Date, default: Date.now },
+            credential: {type : Schema.Types.ObjectId, ref : 'credentials'},
         });
 
         this._model = model<IProxy>('proxyroutes', schema);

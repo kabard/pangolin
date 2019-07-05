@@ -1,4 +1,5 @@
 import { PluginType } from './plugin';
+import { ModelRegister } from './models/register';
 
 /**
  * Mainifest(params:PluginType);
@@ -22,5 +23,8 @@ export class Mainifest {
       console.log('loading plugin %s on app', eachPlugin);
       plugin.initWebApp(this.params);
     });
+  }
+  RegisterModel() {
+    this.params.app.models = ModelRegister();
   }
 }

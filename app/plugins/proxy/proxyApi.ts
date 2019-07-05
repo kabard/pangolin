@@ -1,6 +1,6 @@
 import { PluginType } from '../../plugin';
 import * as Router from 'koa-router';
-import { ProxyModel } from './proxy.models';
+import { ProxyModel } from '../../models/proxy/proxy.models';
 import axios from 'axios';
 
 export class ProxyApi {
@@ -12,9 +12,9 @@ export class ProxyApi {
     }
     async initialize() {
         // load from the routes from mapping file
-        const proxyM = new ProxyModel();
+        const proxyM = this.params.app.models.ProxyModel;
         try {
-            const routes: Array<any> = await proxyM.find();
+            const routes: Array<any> = await proxyM.findWithCred();
             routes.forEach( (eachBasePath: any) => {
                 this._addRoute(eachBasePath);
             });
@@ -30,7 +30,7 @@ export class ProxyApi {
             const Troute = this._getRoute(eachProxy.method);
             // All the Authentication and middleware should be added here.
             // The Proxy action should also come from database!
-            Troute(eachProxy.base_path, async (ctx: any) => {
+            Troute(eachProxy.base_path, this.params.app.utils.BasicAuthication, async (ctx: any) => {
                 try {
                     console.log(`${eachBasePath.remoteUrl}${eachProxy.remote_path}`);
                     const response = await axios({

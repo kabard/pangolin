@@ -5,6 +5,7 @@ plugins:
   - ./plugins/swagger
   - ./plugins/externals
   - ./plugins/redis-session
+  - ./plugins/policy
   - ./plugins/proxy
 
 port: 3000
