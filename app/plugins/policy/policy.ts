@@ -1,4 +1,5 @@
 import { PolicyList } from './policy.interface';
+import { PluginType } from '../../plugin';
 import { Context } from 'koa';
 import { NextFunction } from 'connect';
 
@@ -7,13 +8,14 @@ const bcrypt = require('bcrypt');
 const auth = require('koa-basic-auth');
 
 export class Policy implements PolicyList {
-    constructor() {
-
+  private params: PluginType;
+    constructor(params: PluginType ) {
+      this.params = params;
     }
     async BasicAuthication (ctx: Context, next: NextFunction) {
         const nextCall: any = undefined;
         try {
-            const nextCall = await auth({user: 'a', pass: 'b'})(ctx, next);
+            const nextCall = await auth({user: ctx.customMeta.get('user'), pass: ctx.customMeta.get('password')})(ctx, next);
             return nextCall;
           } catch (err) {
             if (401 == err.status) {
