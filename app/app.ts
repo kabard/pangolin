@@ -1,14 +1,18 @@
 import * as Koa from 'koa';
 
 
-import * as CONFIG from 'config';
 import { Mainifest } from './manifest';
 import { PluginType } from './plugin';
 import { routes } from './routes';
-
+import { setDefaultENV } from './setEnv';
 const app = new Koa();
 
 app.use(routes);
+// add default configs
+setDefaultENV();
+
+// load config once default environment are laoded;
+import * as CONFIG from 'config';
 // build the config data
 const param: PluginType = {
   app: app,

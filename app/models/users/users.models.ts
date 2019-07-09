@@ -8,4 +8,29 @@ export class UsersModel extends BaseModel {
     constructor() {
         super(new Users().model);
     }
+    save(doc: any ): Promise<any> {
+        return  new Promise( (resolve, reject) => {
+            const document = new this._model(doc);
+            document.save( (err: any, doc: any) => {
+                 if (err) {
+                     reject(err);
+                 } else {
+                     // don't show password, TODO : handle it in schema
+                     doc. password = undefined;
+                     resolve(doc);
+                 }
+            });
+        });
+    }
+    getUserDetails(username: string) {
+        return new Promise( (resolve, reject) => {
+            this._model.findOne({username: username}).select('+password').exec((err: any, doc: any) => {
+                if (!err &&  doc) {
+                    resolve(doc);
+                } else  {
+                    reject(err || 'user does not exist');
+                }
+            });
+        });
+    }
 }

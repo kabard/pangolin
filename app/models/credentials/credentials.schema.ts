@@ -1,4 +1,5 @@
 import { Schema, model, Document, Model } from 'mongoose';
+const crypto = require('crypto');
 
 
 declare interface ICredentials extends Document {
@@ -15,18 +16,23 @@ export class Credentials {
 
     constructor() {
         const schema =  new Schema({
-            userid: {type : Schema.Types.ObjectId, ref : 'users'},
+            userid: {type : Schema.Types.ObjectId, ref : 'users', required: true},
             type: { type: String, required: true, enum : ['basicAuth', 'JWT-Token', 'API-Key'], default: 'basicAuth' },
-            username: { type: String, required: false },
-            passowrd: { type: String, required: false },
             apiKey: { type: String, required: false },
             creation_date: { type: Date, default: Date.now },
         });
 
+        schema.pre('save', function(next: any) {
+            _preSaveValidation.call(this, next);
+        });
         this._model = model<ICredentials>('credentials', schema);
     }
 
     public get model(): Model<ICredentials> {
         return this._model;
     }
+}
+function _preSaveValidation(next: any) {
+    this.type.toLowerCase() == 'api-key' && (this.apiKey = crypto.randomBytes(16).toString('hex'));
+    next();
 }

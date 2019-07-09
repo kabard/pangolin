@@ -30,7 +30,7 @@ export class ProxyApi {
             const Troute = this._getRoute(eachProxy.method);
             // All the Authentication and middleware should be added here.
             // The Proxy action should also come from database!
-            Troute(eachProxy.base_path, this._addContentToctx({key: 'customMeta', value: eachBasePath.credential }), this.params.app.utils.BasicAuthication, async (ctx: any) => {
+            Troute(eachProxy.base_path, this._addContentToctx({key: 'customMeta', value: eachBasePath.credential }), /*this.params.app.utils.BasicAuthication*/ this.params.app.utils.JWTAuth , async (ctx: any) => {
                 try {
                     console.log(`${eachBasePath.remoteUrl}${eachProxy.remote_path}`);
                     const response = await axios({

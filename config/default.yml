@@ -7,6 +7,7 @@ plugins:
   - ./plugins/redis-session
   - ./plugins/policy
   - ./plugins/proxy
+  - ./plugins/admin_apis
 
 port: 3000
 
@@ -14,6 +15,5 @@ Redis:
   URL: 'localhost:6379'
   nodes:
     - 'localhost:6379'
-  key: 'koa:sess'
 mongodb:
   url: 'mongodb://localhost:27017/ate_way'

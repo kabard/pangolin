@@ -1,0 +1,10 @@
+
+{
+  "Redis":{
+    "key": "REDIS_SECRET_KEY"
+  },
+  "JWT": {
+    "secret": "JWT_SECRET_KEY",
+    "expiretime": "JWT_EXPIRETIME"
+  }
+}
