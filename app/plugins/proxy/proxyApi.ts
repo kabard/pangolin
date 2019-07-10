@@ -1,14 +1,20 @@
 import { PluginType } from '../../plugin';
 import * as Router from 'koa-router';
 import { ProxyModel } from '../../models/proxy/proxy.models';
+import { MiddlewareHandler } from './middlewareHandler';
 import axios from 'axios';
+import { Middleware } from 'koa';
+const compose = require('koa-compose');
+
 
 export class ProxyApi {
     params: PluginType;
     router: Router;
+    middlewareHandler: MiddlewareHandler;
     constructor(params: PluginType) {
         this.params = params;
         this.router = new Router();
+        this.middlewareHandler = new MiddlewareHandler(params);
     }
     async initialize() {
         // load from the routes from mapping file
@@ -25,14 +31,20 @@ export class ProxyApi {
 
     }
     _addRoute(eachBasePath: any) {
+        const middlewareFunc: Array<Middleware> = [this.middlewareHandler.addCustomDetailsToCtx([
+            {key: 'customMeta', value: eachBasePath.credential}
+        ])];
+        // Add each policy in the middleware
+        eachBasePath.policy.forEach(( eachPolicy: any) => {
+            middlewareFunc.push(this.middlewareHandler.DecoratorMiddleware(eachPolicy.name, eachPolicy.arguments));
+        });
         eachBasePath.routes.forEach( (eachProxy: any) => {
-            console.log(`added api ${eachProxy.base_path}`);
+            eachProxy.policy.forEach( (eachPolicy: any) => {
+                middlewareFunc.push(this.middlewareHandler.DecoratorMiddleware(eachPolicy.name, eachPolicy.arguments));
+            });
             const Troute = this._getRoute(eachProxy.method);
-            // All the Authentication and middleware should be added here.
-            // The Proxy action should also come from database!
-            Troute(eachProxy.base_path, this._addContentToctx({key: 'customMeta', value: eachBasePath.credential }), /*this.params.app.utils.BasicAuthication*/ this.params.app.utils.JWTAuth , async (ctx: any) => {
+            Troute(eachProxy.base_path, compose(middlewareFunc) , async (ctx: any) => {
                 try {
-                    console.log(`${eachBasePath.remoteUrl}${eachProxy.remote_path}`);
                     const response = await axios({
                         method: eachProxy.method,
                         url : `${eachBasePath.remoteUrl}${eachProxy.remote_path}`
@@ -56,11 +68,5 @@ export class ProxyApi {
             default:
                 return this.router.get.bind(this.router, params);
         }
-    }
-    _addContentToctx(_values: any ) {
-        return  async (ctx: any, next: any ) => {
-            ctx[_values.key] = _values.value;
-            await next();
-        };
     }
 }

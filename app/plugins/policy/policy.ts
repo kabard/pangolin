@@ -14,7 +14,8 @@ export class Policy implements PolicyList {
       this.params = params;
       this.secret = this.params.config.get('JWT.secret');
     }
-    async BasicAuthication (ctx: Context, next: NextFunction): Promise<any> {
+    BasicAuthication (...args: Array<string>): Middleware {
+      return async function (ctx: Context, next: NextFunction) {
         try {
             return await auth({user: ctx.customMeta.get('user'), pass: ctx.customMeta.get('password')})(ctx, next);
           } catch (err) {
@@ -26,33 +27,38 @@ export class Policy implements PolicyList {
               throw err;
             }
           }
+        };
     }
-    APIKey (ctx: Context, next: NextFunction): Promise<any> {
-      return new Promise((resolve, reject) => { });
+    APIKey(...args: Array<string>): Middleware {
+      return async function(ctx: Context, next: NextFunction) {
+        return new Promise((resolve, reject) => { });
+      };
     }
-    JWTAuth (ctx: Context, next: NextFunction): Promise<any> {
+    JWTAuth(...args: Array<string>): Middleware {
       const secret = this.secret;
-      try {
-        return jwt({ secret: secret })(ctx, next);
-      } catch (err) {
-        if ( 401 === err.status) {
-          ctx.status = 401;
-          const errMessage = err.originalError ? err.originalError.message : err.message;
-          ctx.body = {
-            error: errMessage
-          };
-          ctx.set('X-Status-Reason', errMessage);
-        } else {
-          throw err;
+      return async function (ctx: Context, next: NextFunction) {
+        try {
+          return jwt({ secret: secret })(ctx, next);
+        } catch (err) {
+          if ( 401 === err.status) {
+            ctx.status = 401;
+            const errMessage = err.originalError ? err.originalError.message : err.message;
+            ctx.body = {
+              error: errMessage
+            };
+            ctx.set('X-Status-Reason', errMessage);
+          } else {
+            throw err;
+          }
         }
-      }
+      };
     }
     Authorization(role: Array<string>): Middleware {
         return async function(ctx: Context, next: NextFunction) {
           try {
             if ( role.indexOf(ctx.state.user.data.roles) == -1) {
               ctx.status = 401;
-              ctx.body = 'you are not autorized';
+              ctx.body = 'you are not authorized';
             } else {
               console.log('inside else part of Auth');
               await next();

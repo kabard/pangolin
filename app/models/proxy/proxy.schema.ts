@@ -6,10 +6,14 @@ type Routetype =  {
     method: string,
     policy: string
 };
+type policy = {
+    name: string,
+    arguments: Array<string>
+};
 declare interface IProxy extends Document {
     remoteUrl: string;
     routes: Array<Routetype>;
-    policy: Array<string>;
+    policy: Array<policy>;
     creation_date: Date;
 }
 
@@ -23,7 +27,7 @@ export class ProxyRoutes {
         const schema =  new Schema({
             remoteUrl: { type: String, required: true },
             routes: { type: Array, required: true },
-            policy: {type: String, required: false},
+            policy: {type: Array, required: false},
             creation_date: { type: Date, default: Date.now },
             credential: {type : Schema.Types.ObjectId, ref : 'credentials'},
         });
