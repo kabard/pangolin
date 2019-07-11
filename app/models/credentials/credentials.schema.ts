@@ -3,9 +3,10 @@ const crypto = require('crypto');
 
 
 declare interface ICredentials extends Document {
-    username: string;
-    password: string;
+    userid: string;
+    type: string;
     creation_date: Date;
+    apiKey ?: string;
 }
 
 export interface CredentialsSchema extends Model<ICredentials> {}

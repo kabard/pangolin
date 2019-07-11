@@ -36,23 +36,23 @@ export class ProxyApi {
         ])];
         // Add each policy in the middleware
         eachBasePath.policy.forEach(( eachPolicy: any) => {
-            middlewareFunc.push(this.middlewareHandler.DecoratorMiddleware(eachPolicy.name, eachPolicy.arguments));
+            middlewareFunc.push(this.middlewareHandler.DecoratorMiddleware(eachPolicy.name, ...eachPolicy.arguments));
         });
         eachBasePath.routes.forEach( (eachProxy: any) => {
             eachProxy.policy.forEach( (eachPolicy: any) => {
-                middlewareFunc.push(this.middlewareHandler.DecoratorMiddleware(eachPolicy.name, eachPolicy.arguments));
+                middlewareFunc.push(this.middlewareHandler.DecoratorMiddleware(eachPolicy.name, ...eachPolicy.arguments));
             });
             const Troute = this._getRoute(eachProxy.method);
             Troute(eachProxy.base_path, compose(middlewareFunc) , async (ctx: any) => {
                 try {
                     const response = await axios({
                         method: eachProxy.method,
-                        url : `${eachBasePath.remoteUrl}${eachProxy.remote_path}`
+                        url : `${eachBasePath.remote_url}${eachProxy.remote_path}`
                     });
                     ctx.response.body = response.data;
                 }
                 catch (error) {
-                    ctx.response.body = error.response.data;
+                    ctx.response.body = error;
                 }
             });
         });

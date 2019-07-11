@@ -7,6 +7,18 @@ import { Roles } from '../../models/users/roles';
 const auth = require('koa-basic-auth');
 const jwt = require('koa-jwt');
 
+// Authorization expect data inside context.state.user
+// This is just to make it more readble, and to understand what ctx.state.user should contain
+export type AuthorizeContent = {
+    data: {
+      roles?: string,
+      _id?: string,
+      username?: string,
+      creation_date?: Date
+    },
+   exp?: number,
+   iat?: number
+};
 export class Policy implements PolicyList {
   private params: PluginType;
   private secret: string;
@@ -17,7 +29,15 @@ export class Policy implements PolicyList {
     BasicAuthication (...args: Array<string>): Middleware {
       return async function (ctx: Context, next: NextFunction) {
         try {
-            return await auth({user: ctx.customMeta.get('user'), pass: ctx.customMeta.get('password')})(ctx, next);
+          // add users details to context;
+          const dummyAuthorizeContent: AuthorizeContent =  {
+              data: {},
+          };
+            const userData = await this.params.app.models.UsersModel.findOne({_id: ctx.state.customMeta.userid});
+            dummyAuthorizeContent.data = userData;
+            ctx.state.user = dummyAuthorizeContent;
+            console.log('here is the output', ctx.state.customMeta, ctx.state.user );
+            return await auth({user: args[0], pass: args[1]})(ctx, next);
           } catch (err) {
             if (401 == err.status) {
               ctx.status = 401;
@@ -27,7 +47,7 @@ export class Policy implements PolicyList {
               throw err;
             }
           }
-        };
+        }.bind(this);
     }
     APIKey(...args: Array<string>): Middleware {
       return async function(ctx: Context, next: NextFunction) {
@@ -56,6 +76,7 @@ export class Policy implements PolicyList {
     Authorization(role: Array<string>): Middleware {
         return async function(ctx: Context, next: NextFunction) {
           try {
+            console.log(ctx.state);
             if ( role.indexOf(ctx.state.user.data.roles) == -1) {
               ctx.status = 401;
               ctx.body = 'you are not authorized';
@@ -64,7 +85,7 @@ export class Policy implements PolicyList {
               await next();
             }
           } catch (e) {
-            console.log('inside catch part of Auth');
+            console.log('inside catch part of Auth', e);
             ctx.status = 401;
             ctx.body = e;
           }

@@ -26,9 +26,19 @@ export class BaseModel implements ModelMethods {
         return  new Promise( (resolve, reject) => {
         });
     }
-    find(): Promise<any> {
+    find(doc: any = {}): Promise<any> {
         return  new Promise( (resolve, reject) => {
-            this._model.find((err: any, data: any) => {
+            this._model.find(doc, (err: any, data: any) => {
+                if (err) {
+                    reject(err);
+                }
+                resolve(data);
+            });
+        });
+    }
+    findOne(doc: any = {}): Promise<any> {
+        return  new Promise( (resolve, reject) => {
+            this._model.findOne(doc, (err: any, data: any) => {
                 if (err) {
                     reject(err);
                 }

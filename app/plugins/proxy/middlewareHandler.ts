@@ -13,8 +13,9 @@ export class MiddlewareHandler {
     }
     DecoratorMiddleware( middlewareName: string | number, ...args: Array<string>) {
         console.log(`decorator ${middlewareName}: ${args}`);
-        if (this.params.app.utils[middlewareName])
-            return this.params.app.utils[middlewareName](args);
+        if (this.params.app.utils[middlewareName]) {
+            return this.params.app.utils[middlewareName](...args);
+        }
         return (ctx: Context, next: NextFunction) => next();
     }
     addCustomDetailsToCtx(content: Array<keyVal>) {
