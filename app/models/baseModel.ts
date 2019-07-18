@@ -26,9 +26,9 @@ export class BaseModel implements ModelMethods {
         return  new Promise( (resolve, reject) => {
         });
     }
-    find(doc: any = {}): Promise<any> {
+    find(doc: any = {}, field: any = {}): Promise<any> {
         return  new Promise( (resolve, reject) => {
-            this._model.find(doc, (err: any, data: any) => {
+            this._model.find(doc, field, (err: any, data: any) => {
                 if (err) {
                     reject(err);
                 }
@@ -36,9 +36,9 @@ export class BaseModel implements ModelMethods {
             });
         });
     }
-    findOne(doc: any = {}): Promise<any> {
+    findOne(doc: any = {}, field: any = {}): Promise<any> {
         return  new Promise( (resolve, reject) => {
-            this._model.findOne(doc, (err: any, data: any) => {
+            this._model.findOne(doc, field, (err: any, data: any) => {
                 if (err) {
                     reject(err);
                 }

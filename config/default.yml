@@ -7,6 +7,7 @@ plugins:
   - ./plugins/redis-session
   - ./plugins/policy
   - ./plugins/proxy
+  - ./plugins/utils
   - ./plugins/admin_apis
 
 port: 3000

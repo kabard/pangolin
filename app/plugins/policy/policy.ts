@@ -91,4 +91,24 @@ export class Policy implements PolicyList {
           }
         };
     }
+    /**
+     * PolicyInfo()
+     * returns the arguments expected in the Policy functions
+     */
+    public PolicyInfo() {
+      return [
+        {
+          name: 'BasicAuthication',
+          arguments: ['expects username', 'expects password']
+        },
+        {
+          name: 'JWTAuth',
+          arguments: [],
+        },
+        {
+          name: 'Authorization',
+          arguments: ['expects existing roles. can pass multiple roles ']
+        }
+      ];
+    }
 }

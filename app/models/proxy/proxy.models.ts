@@ -17,4 +17,22 @@ export class ProxyModel extends BaseModel {
             });
         });
     }
+    findByIdAndUpdate(id: string, doc: any): Promise<any> {
+        return new Promise( (resolve, reject) => {
+            this._model.findByIdAndUpdate(id,
+                {
+                    $push: doc,
+                },
+                {
+                    upsert: true,
+                    new : true
+                },
+                function(err, document) {
+                    if (err) {
+                        reject(err);
+                    }
+                    resolve(document);
+                });
+        });
+    }
 }

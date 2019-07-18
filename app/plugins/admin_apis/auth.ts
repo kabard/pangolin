@@ -1,22 +1,22 @@
 import { PluginType } from '../../plugin';
 import * as Router from 'koa-router';
 import { compareSync } from 'bcrypt';
-const jsonwebtoken = require('jsonwebtoken');
 export class AuthRoutes {
     private params: PluginType;
     private router: Router;
     constructor(params: PluginType) {
         this.params = params;
         this.router = new Router({
-            prefix: '/users'
+            prefix: '/admin'
           });
     }
     initialize() {
         this._login();
+        this._refresh();
         this.params.app.use(this.router.routes());
     }
     _login() {
-        this.router.post('/login',  async (ctx: any) => {
+        this.router.post('/jwt/auth',  async (ctx: any) => {
             try {
                 const result = await this.params.app.models.UsersModel.getUserDetails(ctx.request.body.username);
                 if (!compareSync(ctx.request.body.password, result.password)) {
@@ -24,13 +24,27 @@ export class AuthRoutes {
                     return;
                 }
                 result.password = undefined;
-                const token =
-                jsonwebtoken.sign({
-                    data: result,
-                    exp: Math.floor(Date.now() / 1000) + parseInt(this.params.config.get('JWT.expiretime')),
-                  }, this.params.config.get('JWT.secret'));
-                  ctx.body = token;
+                const token = this.params.app.utils.generateJWTToken(result);
+                  ctx.body = {
+                      token: token,
+                      username: result.username
+                    };
                   ctx.session[result.username] = token;
+            } catch (e) {
+                console.log(e);
+                ctx.status = 406;
+                ctx.body = e;
+            }
+        });
+    }
+    _refresh() {
+        this.router.get('/jwt/refresh', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']), async (ctx: any) => {
+            try {
+                const token = this.params.app.utils.generateJWTToken(ctx.state.user.data);
+                ctx.body = {
+                    token: token,
+                    username: ctx.state.user.data.username
+                };
             } catch (e) {
                 console.log(e);
                 ctx.status = 406;
