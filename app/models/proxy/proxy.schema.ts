@@ -1,19 +1,11 @@
 import { Schema, model, Document, Model } from 'mongoose';
 
-type Routetype =  {
-    base_path: string,
-    remote_path: string,
-    method: string,
-    policy: string,
-    Name: string
-};
 type policy = {
     name: string,
     arguments: Array<string>
 };
 declare interface IProxy extends Document {
     remote_url: string;
-    routes: Array<Routetype>;
     policy: Array<policy>;
     creation_date: Date;
     name: string;
@@ -21,7 +13,7 @@ declare interface IProxy extends Document {
 
 export interface ProxySchema extends Model<IProxy> {}
 
-export class ProxyRoutes {
+export class Proxy {
 
     private _model: Model<IProxy>;
 
@@ -29,13 +21,12 @@ export class ProxyRoutes {
         const schema =  new Schema({
             name : {type: String, required: true},
             remote_url: { type: String, required: true },
-            routes: { type: Array, required: true },
             policy: {type: Array, required: false},
             creation_date: { type: Date, default: Date.now },
             credential: {type : Schema.Types.ObjectId, ref : 'credentials'},
         });
 
-        this._model = model<IProxy>('proxyroutes', schema);
+        this._model = model<IProxy>('proxies', schema);
     }
 
     public get model(): Model<IProxy> {

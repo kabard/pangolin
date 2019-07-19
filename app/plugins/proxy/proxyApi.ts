@@ -1,6 +1,6 @@
 import { PluginType } from '../../plugin';
 import * as Router from 'koa-router';
-import { ProxyModel } from '../../models/proxy/proxy.models';
+import { RouteModel } from '../../models/route/route.models';
 import { MiddlewareHandler } from './middlewareHandler';
 import axios from 'axios';
 import { Middleware } from 'koa';
@@ -18,11 +18,11 @@ export class ProxyApi {
     }
     async initialize() {
         // load from the routes from mapping file
-        const proxyM = this.params.app.models.ProxyModel;
+        const proxyM = this.params.app.models.RouteModel;
         try {
-            const routes: Array<any> = await proxyM.findWithCred();
-            routes.forEach( (eachBasePath: any) => {
-                this._addRoute(eachBasePath);
+            const routes: Array<any> = await proxyM.findWithProxyAndCredential();
+            routes.forEach( (eachRoute: any) => {
+                this._addRoute(eachRoute);
             });
         } catch (e) {
             console.log(e);
@@ -30,31 +30,31 @@ export class ProxyApi {
         this.params.app.use(this.router.routes());
 
     }
-    _addRoute(eachBasePath: any) {
+    _addRoute(eachRoute: any) {
         const middlewareFunc: Array<Middleware> = [this.middlewareHandler.addCustomDetailsToCtx([
-            {key: 'customMeta', value: eachBasePath.credential}
+            {key: 'customMeta', value: eachRoute.proxyId.credential}
         ])];
-        // Add each policy in the middleware
-        eachBasePath.policy.forEach(( eachPolicy: any) => {
+        // Add the Policies defined in Routes first
+        eachRoute.policy.forEach(( eachPolicy: any) => {
             middlewareFunc.push(this.middlewareHandler.DecoratorMiddleware(eachPolicy.name, ...eachPolicy.arguments));
         });
-        eachBasePath.routes.forEach( (eachProxy: any) => {
-            eachProxy.policy.forEach( (eachPolicy: any) => {
-                middlewareFunc.push(this.middlewareHandler.DecoratorMiddleware(eachPolicy.name, ...eachPolicy.arguments));
-            });
-            const Troute = this._getRoute(eachProxy.method);
-            Troute(eachProxy.base_path, compose(middlewareFunc) , async (ctx: any) => {
-                try {
-                    const response = await axios({
-                        method: eachProxy.method,
-                        url : `${eachBasePath.remote_url}${eachProxy.remote_path}`
-                    });
-                    ctx.response.body = response.data;
-                }
-                catch (error) {
-                    ctx.response.body = error;
-                }
-            });
+        eachRoute.proxyId.policy.forEach( (eachPolicy: any) => {
+            middlewareFunc.push(this.middlewareHandler.DecoratorMiddleware(eachPolicy.name, ...eachPolicy.arguments));
+        });
+        // get the koa router method
+        const Troute = this._getRoute(eachRoute.method);
+        console.log('registering route', eachRoute.base_path);
+        Troute(eachRoute.base_path, compose(middlewareFunc) , async (ctx: any) => {
+            try {
+                const response = await axios({
+                    method: eachRoute.method,
+                    url : `${eachRoute.proxyId.remote_url}${eachRoute.remote_path}`
+                });
+                ctx.response.body = response.data;
+            }
+            catch (error) {
+                ctx.response.body = error;
+            }
         });
     }
     _getRoute(method: string, ...params: any) {
