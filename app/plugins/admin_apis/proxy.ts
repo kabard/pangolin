@@ -11,14 +11,14 @@ export class Proxy {
     }
     initialize() {
         this._create();
-        this._list();
-        this._query();
-        this._appendRoutes();
+        this._read();
         this._update();
+        this._delete();
+        this._query();
         this.params.app.use(this.router.routes());
     }
     _create() {
-        this.router.post('/add', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']),   async (ctx: any) => {
+        this.router.post('/create', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']),   async (ctx: any) => {
             try {
                 const result = await this.params.app.models.ProxyModel.save(ctx.request.body);
                 delete result.password;
@@ -43,8 +43,8 @@ export class Proxy {
             }
         });
     }
-    _list() {
-        this.router.get('/list', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']), async(ctx: any) => {
+    _read() {
+        this.router.get('/fetch', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']), async(ctx: any) => {
             try {
                 const result = await this.params.app.models.ProxyModel.find();
                 ctx.body = result;
@@ -68,6 +68,7 @@ export class Proxy {
             }
         });
     }
+    _delete() {}
     _appendRoutes() {
         this.router.post('/appendRoute/:id', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']), async (ctx: any) => {
             try {

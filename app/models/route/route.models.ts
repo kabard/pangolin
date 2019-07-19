@@ -21,4 +21,14 @@ export class RouteModel extends BaseModel {
             });
         });
     }
+    findByIdAndUpdate(id: string, doc: any): Promise<any> {
+        return new Promise( (resolve, reject) => {
+            this._model.findByIdAndUpdate({_id: id}, doc, {new: true}, function(err, document) {
+                if (err) {
+                    reject(err);
+                }
+                resolve (document);
+            });
+        });
+    }
 }

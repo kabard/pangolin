@@ -46,4 +46,14 @@ export class BaseModel implements ModelMethods {
             });
         });
     }
+    delete(id: string): Promise <any> {
+        return new Promise ( (resolve, reject) => {
+            this._model.remove({_id: id}, function (err: any, document: any) {
+                if ( err) {
+                    reject(err);
+                }
+                resolve(document);
+            });
+        });
+    }
 }
