@@ -1,5 +1,6 @@
 import { Users, UsersSchema  } from './users.schema';
 import { BaseModel } from '../baseModel';
+import { Roles } from './roles';
 
 
 
@@ -31,6 +32,11 @@ export class UsersModel extends BaseModel {
                     reject(err || 'user does not exist');
                 }
             });
+        });
+    }
+    getListOfRoles() {
+        return new Promise( (resolve, reject) => {
+            resolve(Roles);
         });
     }
 }

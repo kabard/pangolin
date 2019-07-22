@@ -13,7 +13,9 @@ export class UsersRoute {
         this._query();
         this._create();
         this._list();
+        this._update();
         this.params.app.use(this.router.routes());
+        this._getRoleList();
     }
     _create() {
         this.router.post('/create', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']),   async (ctx: any) => {
@@ -23,7 +25,7 @@ export class UsersRoute {
                 ctx.body = result;
             } catch (e) {
                 ctx.status = 406;
-                ctx.body = e;
+                ctx.body = e.toString();
             }
         });
     }
@@ -38,6 +40,20 @@ export class UsersRoute {
             }
         });
     }
+    _update() {
+        this.router.post('/update/:id', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']), async (ctx: any) => {
+            try {
+                const id = ctx.params.id;
+                const data = ctx.request.body;
+                const result = await this.params.app.models.UsersModel.update({_id: id}, {$set: data});
+                ctx.body = result;
+            } catch (e) {
+                ctx.status = 406;
+                console.log('error occured', e);
+                ctx.body = e.toString();
+            }
+        });
+    }
     _query() {
         this.router.get('/query', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']), async (ctx: any) => {
             try {
@@ -48,6 +64,18 @@ export class UsersRoute {
             } catch (e) {
                 ctx.status = 406;
                 console.log('error occured', e);
+                ctx.body = e.toString();
+            }
+        });
+    }
+    _getRoleList() {
+        this.router.get('/roles', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']), async (ctx: any) => {
+            try {
+                console.log('its here');
+                const roles = await this.params.app.models.UsersModel.getListOfRoles();
+                ctx.body = roles;
+            } catch (e) {
+                ctx.status = 406;
                 ctx.body = e.toString();
             }
         });
