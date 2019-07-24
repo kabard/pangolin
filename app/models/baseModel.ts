@@ -73,4 +73,25 @@ export class BaseModel implements ModelMethods {
             });
         });
     }
+    deleteWithReferencialIntegrity(id: string, refModel: any, query: any): Promise <any> {
+        return new Promise ( async (resolve, reject) => {
+            // check if any proxy uses credential table
+            try {
+                const data = await refModel.findOne(query);
+                if (data) {
+                    reject(`Error: document  has a referrance in another collection `);
+                    return;
+                }
+                this._model.remove({_id: id}, function(err: any) {
+                    if ( err) {
+                        reject(err);
+                        return;
+                    }
+                    resolve('document removed!');
+                });
+            } catch (e) {
+                reject(e);
+            }
+        });
+    }
 }

@@ -68,7 +68,18 @@ export class Proxy {
             }
         });
     }
-    _delete() {}
+    _delete() {
+        this.router.delete('/delete/:id', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']) , async (ctx: any) => {
+            try {
+                const id = ctx.params.id;
+                const result = await this.params.app.models.ProxyModel.deleteWithReferencialIntegrity(id, this.params.app.models.RouteModel, {proxyId: id}  );
+                ctx.body = result;
+            } catch (e) {
+                ctx.status = 406;
+                ctx.body = e.toString();
+            }
+        });
+    }
     _appendRoutes() {
         this.router.post('/appendRoute/:id', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']), async (ctx: any) => {
             try {
