@@ -1,10 +1,14 @@
 
 {
   "Redis":{
+    "URL": "REDIS_URL",
     "key": "REDIS_SECRET_KEY"
   },
   "JWT": {
     "secret": "JWT_SECRET_KEY",
     "expiretime": "JWT_EXPIRETIME"
+  },
+  "mongodb":{
+    "url": "MONGO_URL"
   }
 }
