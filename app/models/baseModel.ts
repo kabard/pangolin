@@ -1,8 +1,9 @@
 
 interface ModelMethods {
     save(doc: any): Promise<any>;
-    update(): Promise<any>;
+    update(query: any, update: any ): Promise<any>;
     find(): Promise<any>;
+    findByIdAndUpdate(id: string, doc: any): Promise<any>;
 }
 
 export class BaseModel implements ModelMethods {
@@ -22,8 +23,14 @@ export class BaseModel implements ModelMethods {
            });
        });
     }
-    update(): Promise<any> {
-        return  new Promise( (resolve, reject) => {
+    update(query: any, doc: any): Promise<any> {
+        return new Promise( (resolve, reject) => {
+            this._model.update(query, doc, function(err: any, document: any) {
+                if (err) {
+                    reject(err);
+                }
+                resolve (document);
+            });
         });
     }
     find(doc: any = {}, field: any = {}): Promise<any> {
@@ -53,6 +60,16 @@ export class BaseModel implements ModelMethods {
                     reject(err);
                 }
                 resolve(document);
+            });
+        });
+    }
+    findByIdAndUpdate(id: string, doc: any): Promise<any> {
+        return new Promise( (resolve, reject) => {
+            this._model.findByIdAndUpdate({_id: id}, doc, {new: true}, function(err: any, document: any) {
+                if (err) {
+                    reject(err);
+                }
+                resolve (document);
             });
         });
     }

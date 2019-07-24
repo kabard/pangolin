@@ -25,6 +25,21 @@ export class Users {
         schema.pre('save', function(next: any) {
             _preSaveValidation.call(this, next);
         });
+        schema.pre('update', function( next: any ) {
+            const content = this.getUpdate();
+            if ( content['$set'].password ) {
+                if ( isValidPassword(content['$set'].password) ) {
+                    content['$set'].password = hashSync(content['$set'].password, 5);
+                } else {
+                    console.log('error password is not valid');
+                    next ( new Error( 'password is not valid, Expecting minimum eight characters, at least one letter, one number and one special character'));
+                }
+            } else {
+                delete content.$set.password;
+            }
+            this.update(this.getQuery(), content);
+            next();
+        });
 
         this._model = model<IUsers>('users', schema);
     }
@@ -34,6 +49,14 @@ export class Users {
 }
 
 function _preSaveValidation(next: any) {
-    this.password = hashSync(this.password, 5);
-    next();
+    if (this.password && isValidPassword(this.password)) {
+        this.password = hashSync(this.password, 5);
+        next();
+        return;
+    }
+    next(new Error('password not valid,Expecting minimum eight characters, at least one letter, one number and one special character '));
+}
+function isValidPassword(password: string): boolean {
+   const validate = new RegExp(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/);
+   return validate.test(password);
 }
