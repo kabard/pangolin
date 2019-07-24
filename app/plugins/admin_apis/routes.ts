@@ -7,7 +7,7 @@ export class Route {
         this.params = params;
         this.router = new Router({
             prefix: '/admin/routes'
-          });
+        });
     }
     initialize() {
         this._create();
@@ -18,8 +18,9 @@ export class Route {
         this.params.app.use(this.router.routes());
     }
     _create() {
-        this.router.post('/create', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']),   async (ctx: any) => {
+        this.router.post('/create', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']), async (ctx: any) => {
             try {
+                console.log(`!!!!!!!!!!!!!!!!!!!!!--------------------------- ${ctx.request.body} --------------------------!!!!!!!!!!!!!!!!!!!!!!!`);
                 const result = await this.params.app.models.RouteModel.save(ctx.request.body);
                 ctx.body = result;
             } catch (e) {
@@ -28,9 +29,10 @@ export class Route {
             }
         });
     }
-    _read () {
-        this.router.get('/fetch', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']),   async (ctx: any) => {
+    _read() {
+        this.router.get('/fetch', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']), async (ctx: any) => {
             try {
+                console.log(`!!!!!!!!!!!!!!!!!!!!!--------------------------- ${ctx.request.query} --------------------------!!!!!!!!!!!!!!!!!!!!!!!`);
                 const result = await this.params.app.models.RouteModel.find(ctx.request.query);
                 ctx.body = result;
             } catch (e) {
@@ -39,9 +41,10 @@ export class Route {
             }
         });
     }
-    _update () {
-        this.router.post('/update/:id', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']),   async (ctx: any) => {
+    _update() {
+        this.router.post('/update/:id', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']), async (ctx: any) => {
             try {
+                console.log(`!!!!!!!!!!!!!!!!!!!!!--------------------------- ${ctx.params.id} --------- ${ctx.request.body} --------------------------!!!!!!!!!!!!!!!!!!!!!!!`);
                 const result = await this.params.app.models.RouteModel.findByIdAndUpdate(ctx.params.id, ctx.request.body);
                 ctx.body = result;
             } catch (e) {
@@ -50,9 +53,10 @@ export class Route {
             }
         });
     }
-    _delete () {
-        this.router.delete('/delete/:id', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']),   async (ctx: any) => {
+    _delete() {
+        this.router.delete('/delete/:id', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']), async (ctx: any) => {
             try {
+                console.log(`!!!!!!!!!!!!!!!!!!!!!--------------------------- ${ctx.params.id} --------------------------!!!!!!!!!!!!!!!!!!!!!!!`);
                 const result = await this.params.app.models.RouteModel.delete(ctx.params.id);
                 ctx.body = result;
             } catch (e) {
