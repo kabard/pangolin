@@ -13,18 +13,21 @@ export class CredentialsRoute {
         console.log('initialized ctx ');
         this._query();
         this._create();
+        this._update();
         this._policyList();
+        this._getCredentialType();
+        this._delete();
         this.params.app.use(this.router.routes());
     }
     _create() {
-        this.router.post('/create', this.params.app.policy.JWTAuth, this.params.app.policy.Authorization(['admin']) , async (ctx: any) => {
+        this.router.post('/create', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']) , async (ctx: any) => {
             try {
                 const result = await this.params.app.models.CredentialModel.save(ctx.request.body);
                 console.log('cedential ceated ! ', result);
                 ctx.body = result;
             } catch (e) {
                 ctx.status = 406;
-                ctx.body = e;
+                ctx.body = e.toString();
             }
         });
     }
@@ -42,9 +45,45 @@ export class CredentialsRoute {
             }
         });
     }
+    _update() {
+        this.router.post('/update/:id', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']) , async (ctx: any) => {
+            try {
+                const id = ctx.params.id;
+                const data = ctx.request.body;
+                const result = await this.params.app.models.CredentialModel.update({_id: id}, {$set: data});
+                ctx.body = result;
+            } catch (e) {
+                ctx.status = 406;
+                ctx.body = e;
+            }
+        });
+    }
+    _delete() {
+        this.router.delete('/delete/:id', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']) , async (ctx: any) => {
+            try {
+                const id = ctx.params.id;
+                const result = await this.params.app.models.CredentialModel.delete(id);
+                ctx.body = result;
+            } catch (e) {
+                ctx.status = 406;
+                ctx.body = e.toString();
+            }
+        });
+    }
     _policyList () {
         this.router.get('/policy/list', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']), async (ctx: any) => {
             ctx.body = this.params.app.policyInfo;
+        });
+    }
+    _getCredentialType() {
+        this.router.get('/type', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']), async (ctx: any) => {
+           try {
+            const result = await this.params.app.models.CredentialModel.getCredentialType();
+            ctx.body = result;
+           } catch ( e ) {
+               ctx.status = 406;
+               ctx.body = e.toString();
+           }
         });
     }
 
