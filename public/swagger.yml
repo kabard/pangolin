@@ -25,15 +25,19 @@ paths:
   /update/{id}:
     post:
       summary: A route to update the Routes.
+      consumes:
+        - application/json
       parameters:
         - in: query
           name: id
           type: string
-          description: The _id of the document ID as stored in Mongo
           required: true
-      # requestBody:
-      #   required: true
-      #   type: object
+          description: The _id of the document ID as stored in Mongo
+        - in: body
+          required: true
+          description: The body of the modified document
+          schema:
+            $ref: '#/definitions/Routes'
   /delete/{id}:
     delete:
       summary: A route to delete the Routes.
@@ -55,4 +59,28 @@ paths:
           name: filter
           type: string
           description: The information about proxyId in form of {"proxyId":"someProxyID"} in encoded form.
-      
+
+definitions:
+  Routes:
+    type: object
+    required:
+      - name
+      - base_path
+      - remote_path
+      - method
+      - policy
+    properties:
+      name:
+        type: string
+      base_path:
+        type: string
+      remote_path:
+        type: string
+      method:
+        type: string
+      policy:
+        type: array
+        items:
+          type: object
+
+# {"policy":[{"name":"BasicAuthication","arguments":["expects username","expects password"]},{"name":"Authorization","arguments":["expects existing roles. can pass multiple roles "]}]}

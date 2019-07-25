@@ -7,7 +7,7 @@
     "debug": "npm run build && node --inspect-brk='0.0.0.0:9229' ./dist/index.js",
     "start": "npm run build && node ./dist/index.js",
     "build": "npm run lint && node_modules/typescript/bin/tsc",
-    "watch": "nodemon --watch 'app/**/*' -e ts --exec ts-node ./app/app.ts",
+    "watch": "nodemon --watch 'app/**/*' -e ts --exec 'ts-node' ./app/app.ts",
     "lint": "node_modules/tslint/bin/tslint -c tslint.json -p tsconfig.json --force",
     "fix": "node_modules/tslint/bin/tslint -c tslint.json -p tsconfig.json --fix --force",
     "image:build": "docker build --tag koa-typescript-starter .",
