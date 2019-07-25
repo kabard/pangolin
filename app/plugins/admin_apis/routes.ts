@@ -70,7 +70,6 @@ export class Route {
                 ctx.body = result;
             } catch (e) {
                 ctx.status = 406;
-                console.log('error occured', e);
                 ctx.body = e.toString();
             }
         });

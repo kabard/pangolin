@@ -14,17 +14,36 @@ paths:
   /create:
     post:
       summary: A route to create new Routes.
+      responses:
+        '200':
+          description: New route data
+          content:
+            application/json:
+              schema:
+                $ref: '#definitions/ResponseRoutes'
+        '406':
+          description: New route creation not acceptable
     parameters:
-      - in: formData
-        name: body
+      - in: body
         required: true
-        description: Request body
-  /fetch:
-    get:
-      summary: A route to fetch the Routes.
+        description: The body of the request to create a new route
+        schema:
+          $ref: '#/definitions/RequestRoutes'
+  # /fetch:
+  #   get:
+  #     summary: A route to fetch the Routes.
   /update/{id}:
     post:
       summary: A route to update the Routes.
+      responses:
+        '200':
+          description: Updated route data
+          content:
+            application/json:
+              schema:
+                $ref: '#definitions/ResponseRoutes'
+        '406':
+          description: Route update not acceptable
       consumes:
         - application/json
       parameters:
@@ -37,10 +56,26 @@ paths:
           required: true
           description: The body of the modified document
           schema:
-            $ref: '#/definitions/Routes'
+            $ref: '#/definitions/RequestRoutes'
   /delete/{id}:
     delete:
       summary: A route to delete the Routes.
+      responses:
+        '200':
+          description: Delete was successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  n:
+                    type: number
+                  ok:
+                    type: number
+                  deletedCount:
+                    type: number
+        '406':
+          description: Route deletion not acceptable
       parameters:
         - in: path
           name: id
@@ -59,9 +94,18 @@ paths:
           name: filter
           type: string
           description: The information about proxyId in form of {"proxyId":"someProxyID"} in encoded form.
+      responses:
+        '200':
+          description: Delete was successful
+          content:
+            application/json:
+              schema:
+                type: object
+        '406':
+          description: Query not acceptable
 
 definitions:
-  Routes:
+  RequestRoutes:
     type: object
     required:
       - name
@@ -82,5 +126,33 @@ definitions:
         type: array
         items:
           type: object
-
-# {"policy":[{"name":"BasicAuthication","arguments":["expects username","expects password"]},{"name":"Authorization","arguments":["expects existing roles. can pass multiple roles "]}]}
+  ResponseRoutes:
+    type: object
+    required:
+      - _id
+      - name
+      - base_path
+      - remote_path
+      - method
+      - policy
+    properties:
+      _id:
+        type: string
+      name:
+        type: string
+      base_path:
+        type: string
+      remote_path:
+        type: string
+      method:
+        type: string
+      proxyId:
+        type: string
+      creation_date:
+        type: string
+      __v:
+        type: number
+      policy:
+        type: array
+        items:
+          type: object
