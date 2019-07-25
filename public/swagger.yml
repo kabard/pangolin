@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: "Add a Auth layer above API calls"
   version: "1.0.0"
-  title: "King Slayer"
+  title: "MachineSense API Slayer"
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
@@ -14,13 +14,13 @@ paths:
   /create:
     post:
       summary: A route to create new Routes.
+      produces:
+        - application/json
       responses:
         '200':
           description: New route data
-          content:
-            application/json:
-              schema:
-                $ref: '#definitions/ResponseRoutes'
+          schema:
+            $ref: '#definitions/ResponseRoutes'
         '406':
           description: New route creation not acceptable
     parameters:
@@ -35,13 +35,13 @@ paths:
   /update/{id}:
     post:
       summary: A route to update the Routes.
+      produces:
+        - application/json
       responses:
         '200':
           description: Updated route data
-          content:
-            application/json:
-              schema:
-                $ref: '#definitions/ResponseRoutes'
+          schema:
+            $ref: '#definitions/ResponseRoutes'
         '406':
           description: Route update not acceptable
       consumes:
@@ -60,20 +60,20 @@ paths:
   /delete/{id}:
     delete:
       summary: A route to delete the Routes.
+      produces:
+        - application/json
       responses:
         '200':
           description: Delete was successful
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  n:
-                    type: number
-                  ok:
-                    type: number
-                  deletedCount:
-                    type: number
+          schema:
+            type: object
+            properties:
+              n:
+                type: number
+              ok:
+                type: number
+              deletedCount:
+                type: number
         '406':
           description: Route deletion not acceptable
       parameters:
@@ -85,6 +85,8 @@ paths:
   /query:
     get:
       summary: A route to get the proxy or route list in some proxy.
+      produces:
+        - application/json
       parameters:
         - in: query
           name: field
@@ -97,10 +99,8 @@ paths:
       responses:
         '200':
           description: Delete was successful
-          content:
-            application/json:
-              schema:
-                type: object
+          schema:
+            type: object
         '406':
           description: Query not acceptable
 
