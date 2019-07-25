@@ -7,7 +7,80 @@ info:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 host: "localhost:3000"
-basePath: "/api/v1"
+basePath: "/admin/routes"
 schemes:
 - "http"
 paths:
+  /create:
+    post:
+      summary: A route to create new Routes.
+    parameters:
+      - in: formData
+        name: body
+        required: true
+        description: Request body
+  /fetch:
+    get:
+      summary: A route to fetch the Routes.
+  /update/{id}:
+    post:
+      summary: A route to update the Routes.
+      consumes:
+        - application/json
+      parameters:
+        - in: query
+          name: id
+          type: string
+          required: true
+          description: The _id of the document ID as stored in Mongo
+        - in: body
+          required: true
+          description: The body of the modified document
+          schema:
+            $ref: '#/definitions/Routes'
+  /delete/{id}:
+    delete:
+      summary: A route to delete the Routes.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: string
+          description: The _id of the document ID as stored in Mongo
+  /query:
+    get:
+      summary: A route to get the proxy or route list in some proxy.
+      parameters:
+        - in: query
+          name: field
+          type: string
+          description: The information about remote_url, name, credential and policy in form of {"remote_url":"something","name":"somename","credential":"cred","policy":"some policy"} in encoded form.
+        - in: query
+          name: filter
+          type: string
+          description: The information about proxyId in form of {"proxyId":"someProxyID"} in encoded form.
+
+definitions:
+  Routes:
+    type: object
+    required:
+      - name
+      - base_path
+      - remote_path
+      - method
+      - policy
+    properties:
+      name:
+        type: string
+      base_path:
+        type: string
+      remote_path:
+        type: string
+      method:
+        type: string
+      policy:
+        type: array
+        items:
+          type: object
+
+# {"policy":[{"name":"BasicAuthication","arguments":["expects username","expects password"]},{"name":"Authorization","arguments":["expects existing roles. can pass multiple roles "]}]}

@@ -7,7 +7,7 @@ export class Route {
         this.params = params;
         this.router = new Router({
             prefix: '/admin/routes'
-          });
+        });
     }
     initialize() {
         this._create();
@@ -17,8 +17,8 @@ export class Route {
         this._query();
         this.params.app.use(this.router.routes());
     }
-    _create() {
-        this.router.post('/create', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']),   async (ctx: any) => {
+    _create () {
+        this.router.post('/create', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']), async (ctx: any) => {
             try {
                 const result = await this.params.app.models.RouteModel.save(ctx.request.body);
                 ctx.body = result;
@@ -29,7 +29,7 @@ export class Route {
         });
     }
     _read () {
-        this.router.get('/fetch', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']),   async (ctx: any) => {
+        this.router.get('/fetch', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']), async (ctx: any) => {
             try {
                 const result = await this.params.app.models.RouteModel.find(ctx.request.query);
                 ctx.body = result;
@@ -40,7 +40,7 @@ export class Route {
         });
     }
     _update () {
-        this.router.post('/update/:id', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']),   async (ctx: any) => {
+        this.router.post('/update/:id', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']), async (ctx: any) => {
             try {
                 const result = await this.params.app.models.RouteModel.findByIdAndUpdate(ctx.params.id, ctx.request.body);
                 ctx.body = result;
@@ -51,7 +51,7 @@ export class Route {
         });
     }
     _delete () {
-        this.router.delete('/delete/:id', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']),   async (ctx: any) => {
+        this.router.delete('/delete/:id', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']), async (ctx: any) => {
             try {
                 const result = await this.params.app.models.RouteModel.delete(ctx.params.id);
                 ctx.body = result;
@@ -61,7 +61,7 @@ export class Route {
             }
         });
     }
-    _query() {
+    _query () {
         this.router.get('/query', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']), async (ctx: any) => {
             try {
                 const filter = JSON.parse(ctx.request.query['filter'] || '{}') || {};
