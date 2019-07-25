@@ -31,5 +31,15 @@ function _getDefaultList(): Array<EnvTuple> {
             envName: 'JWT_EXPIRETIME',
             defaultValue: '3600'
         },
+        {
+            configName: 'redis.url',
+            envName: 'REDIS_URL',
+            defaultValue: 'localhost:6379'
+        },
+        {
+            configName: 'mongodb.url',
+            envName: 'MONGO_URL',
+            defaultValue: 'mongodb://localhost:27017/ate_way'
+        }
     ];
 }

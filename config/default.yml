@@ -12,9 +12,9 @@ plugins:
 
 port: 3000
 
-Redis:
-  URL: 'localhost:6379'
-  nodes:
-    - 'localhost:6379'
-mongodb:
-  url: 'mongodb://localhost:27017/ate_way'
+# Redis:
+#   URL: 'localhost:6379'
+#   nodes:
+#     - 'localhost:6379'
+# mongodb:
+#   url: 'mongodb://localhost:27017/ate_way'

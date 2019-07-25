@@ -14,8 +14,9 @@ export class UsersRoute {
         this._create();
         this._list();
         this._update();
-        this.params.app.use(this.router.routes());
+        this._delete();
         this._getRoleList();
+        this.params.app.use(this.router.routes());
     }
     _create() {
         this.router.post('/create', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']),   async (ctx: any) => {
@@ -49,7 +50,19 @@ export class UsersRoute {
                 ctx.body = result;
             } catch (e) {
                 ctx.status = 406;
-                console.log('error occured', e);
+
+                ctx.body = e.toString();
+            }
+        });
+    }
+    _delete() {
+        this.router.delete('/delete/:id', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']) , async (ctx: any) => {
+            try {
+                const id = ctx.params.id;
+                const result = await this.params.app.models.UsersModel.deleteWithReferencialIntegrity(id, this.params.app.models.CredentialModel, {userid: id}  );
+                ctx.body = result;
+            } catch (e) {
+                ctx.status = 406;
                 ctx.body = e.toString();
             }
         });

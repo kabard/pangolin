@@ -62,7 +62,7 @@ export class CredentialsRoute {
         this.router.delete('/delete/:id', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']) , async (ctx: any) => {
             try {
                 const id = ctx.params.id;
-                const result = await this.params.app.models.CredentialModel.delete(id);
+                const result = await this.params.app.models.CredentialModel.deleteWithReferencialIntegrity(id, this.params.app.models.RouteModel, {proxyId: id}  );
                 ctx.body = result;
             } catch (e) {
                 ctx.status = 406;
