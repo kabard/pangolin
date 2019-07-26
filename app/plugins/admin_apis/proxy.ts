@@ -86,7 +86,7 @@ export class Proxy {
                 console.log(ctx.params.id);
                 const data = { routes: ctx.request.body };
                 console.log(data);
-                const result = await this.params.app.models.ProxyModel.findByIdAndAppendRoute(ctx.params.id, data);
+                // const result = await this.params.app.models.ProxyModel.findByIdAndAppendRoute(ctx.params.id, data);
                 ctx.body = ctx.params.id;
             } catch (e) {
                 ctx.status = 406;

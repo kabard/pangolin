@@ -1,7 +1,7 @@
 import { PluginType } from '../../plugin';
 import { Context } from 'koa';
 import { NextFunction } from 'connect';
-import composer = require('koa-compose');
+// import composer = require('koa-compose');
 type keyVal = {
     key: string,
     value: string

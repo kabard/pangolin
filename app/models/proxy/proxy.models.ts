@@ -1,7 +1,7 @@
 
 import { Proxy, ProxySchema  } from './proxy.schema';
 import { BaseModel } from '../baseModel';
-import { rejects } from 'assert';
+// import { rejects } from 'assert';
 
 export class ProxyModel extends BaseModel {
     public _model: ProxySchema;

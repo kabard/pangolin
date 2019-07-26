@@ -1,6 +1,6 @@
 import { PluginType } from '../../plugin';
 import * as Router from 'koa-router';
-import { RouteModel } from '../../models/route/route.models';
+// import { RouteModel } from '../../models/route/route.models';
 import { MiddlewareHandler } from './middlewareHandler';
 import axios from 'axios';
 import { Middleware } from 'koa';
