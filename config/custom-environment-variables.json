@@ -1,7 +1,7 @@
 
 {
   "Redis":{
-    "URL": "REDIS_URL",
+    "host": "REDIS_HOST",
     "key": "REDIS_SECRET_KEY"
   },
   "JWT": {

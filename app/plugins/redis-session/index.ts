@@ -14,7 +14,8 @@ export const initWebApp = function(params: PluginType) {
             maxAge: 21600000,
             // isRedisCluster: true,
             // nodes: nodes,
-            url: redisConf.URL
+            host: redisConf.host || '127.0.0.1',
+            port: redisConf.port || 6379
         })
       }, params.app));
 };
