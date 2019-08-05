@@ -80,19 +80,4 @@ export class Proxy {
             }
         });
     }
-    _appendRoutes() {
-        this.router.post('/appendRoute/:id', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']), async (ctx: any) => {
-            try {
-                console.log(ctx.params.id);
-                const data = { routes: ctx.request.body };
-                console.log(data);
-                const result = await this.params.app.models.ProxyModel.findByIdAndAppendRoute(ctx.params.id, data);
-                ctx.body = ctx.params.id;
-            } catch (e) {
-                ctx.status = 406;
-                console.log('error occured', e);
-                ctx.body = e.toString();
-            }
-        });
-    }
 }

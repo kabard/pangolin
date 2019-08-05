@@ -1,7 +1,9 @@
 import { PluginType } from '../../plugin';
 import { Context } from 'koa';
 import { NextFunction } from 'connect';
-import composer = require('koa-compose');
+import axios from 'axios';
+import { Method, AxiosRequestConfig } from 'axios';
+
 type keyVal = {
     key: string,
     value: string
@@ -24,6 +26,22 @@ export class MiddlewareHandler {
                 ctx.state[ eachElem.key ] = eachElem.value;
             });
             await next();
+        };
+    }
+    ProxyRequest(method: Method, url: string) {
+        return  async (ctx: any) => {
+            try {
+                const option: AxiosRequestConfig = {
+                    method: method, url: url
+                };
+                option.url += ctx.request.query ?  this.params.app.utils.convertJSONtoQuery(ctx.request.query) : undefined;
+                option.data = ctx.request.body ? ctx.request.body : undefined;
+                const response = await axios(option);
+                ctx.response.body = response.data;
+            }
+            catch (error) {
+                ctx.response.body = error.toString();
+            }
         };
     }
 }

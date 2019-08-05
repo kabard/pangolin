@@ -2,7 +2,6 @@ import { PolicyList } from './policy.interface';
 import { PluginType } from '../../plugin';
 import { Context, Middleware } from 'koa';
 import { NextFunction } from 'connect';
-import { Roles } from '../../models/users/roles';
 
 const auth = require('koa-basic-auth');
 const jwt = require('koa-jwt');

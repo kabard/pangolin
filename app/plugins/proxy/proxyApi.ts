@@ -1,8 +1,6 @@
 import { PluginType } from '../../plugin';
 import * as Router from 'koa-router';
-import { RouteModel } from '../../models/route/route.models';
 import { MiddlewareHandler } from './middlewareHandler';
-import axios from 'axios';
 import { Middleware } from 'koa';
 const compose = require('koa-compose');
 
@@ -43,19 +41,8 @@ export class ProxyApi {
         });
         // get the koa router method
         const Troute = this._getRoute(eachRoute.method);
-        console.log('registering route', eachRoute.base_path);
-        Troute(eachRoute.base_path, compose(middlewareFunc) , async (ctx: any) => {
-            try {
-                const response = await axios({
-                    method: eachRoute.method,
-                    url : `${eachRoute.proxyId.remote_url}${eachRoute.remote_path}`
-                });
-                ctx.response.body = response.data;
-            }
-            catch (error) {
-                ctx.response.body = error;
-            }
-        });
+        console.log('registering route, Base:', eachRoute.base_path, '\t remote_url:', `${eachRoute.proxyId.remote_url}${eachRoute.remote_path}`);
+        Troute(eachRoute.base_path, compose(middlewareFunc) , this.middlewareHandler.ProxyRequest(eachRoute.method, `${eachRoute.proxyId.remote_url}${eachRoute.remote_path}`));
     }
     _getRoute(method: string, ...params: any) {
         switch (method) {
