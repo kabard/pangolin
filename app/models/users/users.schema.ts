@@ -1,7 +1,6 @@
 import { Schema, model, Document, Model } from 'mongoose';
 import { Roles, defaultRole } from './roles';
 import { hashSync } from 'bcrypt';
-// const crypto = require('crypto');
 
 declare interface IUsers extends Document {
     username: string;

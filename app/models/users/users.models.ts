@@ -24,11 +24,7 @@ export class UsersModel extends BaseModel {
                     \n\n`);
             } else {
                 if (err === 'No admin users') {
-                    const doc = {
-                        username: 'ProxyDefault',
-                        roles: 'admin',
-                        password: 'MSProxy@2019'
-                    };
+                    const doc = JSON.parse(process.env.defaultAdmin);
                     this.save(doc).then((res: any) => {
                         console.log('\x1b[33m%s\x1b[0m', `\n\n
                             ######################################################################
