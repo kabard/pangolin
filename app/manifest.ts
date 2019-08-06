@@ -24,7 +24,7 @@ export class Mainifest {
       plugin.initWebApp(this.params);
     });
   }
-  RegisterModel() {
-    this.params.app.models = ModelRegister();
+  RegisterModel(CONFIG: any) {
+    this.params.app.models = ModelRegister(CONFIG);
   }
 }

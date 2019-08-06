@@ -1,44 +1,38 @@
 import { Users, UsersSchema } from './users.schema';
 import { BaseModel } from '../baseModel';
 import { Roles } from './roles';
+// import * as CONFIG from 'config';
 
 export class UsersModel extends BaseModel {
     public _model: UsersSchema;
-    constructor() {
+    public _config: any;
+    constructor(config: any) {
         super(new Users().model);
-
-        this.verifyAdminFirstRun();
+        this._config = config;
+        this._verifyAdminFirstRun();
     }
 
-    verifyAdminFirstRun() {
-        this._model.find({ roles: 'admin' }).exec((err: any, doc: any) => {
-            if (!err && doc) {
-                console.log('\x1b[33m%s\x1b[0m', `\n\n
-                    ######################################################################
-                    ######################################################################
-                    ##############             Admin Exists              #################
-                                            Username: ${JSON.stringify(doc[0].username)}
-                    ##############           Use Any To login            #################
-                    ######################################################################
-                    ######################################################################
-                    \n\n`);
-            } else {
-                if (err === 'No admin users') {
-                    const doc = JSON.parse(process.env.defaultAdmin);
-                    this.save(doc).then((res: any) => {
-                        console.log('\x1b[33m%s\x1b[0m', `\n\n
-                            ######################################################################
-                            ######################################################################
-                            ##############         Admin Exists                  #################
-                                    ${JSON.stringify(res)}
-                            ##############       Use It to login first time      #################
-                            ######################################################################
-                            ######################################################################
-                            \n\n`);
-                    }).catch((err) => {
-                        console.error(err);
-                    });
-                }
+    _verifyAdminFirstRun() {
+        this._model.count({ roles: 'admin' }, (err: any, count: any) => {
+            if (err || count < 1 ) {
+                const doc = {
+                    username: this._config.get('defaultadmin'),
+                    password: this._config.get('defaultadminpassword'),
+                    roles: 'admin'
+                };
+                this.save(doc).then((res: any) => {
+                    console.log('\x1b[33m%s\x1b[0m', `\n\n
+                        ######################################################################
+                        ######################################################################
+                        ##############        Default Admin Created                  #################
+                                ${JSON.stringify(res)}
+                        ##############       Use It to login first time      #################
+                        ######################################################################
+                        ######################################################################
+                        \n\n`);
+                }).catch((err) => {
+                    console.log(err);
+                });
             }
         });
     }

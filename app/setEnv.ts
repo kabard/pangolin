@@ -4,12 +4,6 @@ export type EnvTuple = {
     defaultValue: string
 };
 
-const defaultAdmin = {
-    username: 'ProxyDefault',
-    roles: 'admin',
-    password: 'MSProxy@2019'
-};
-
 /**
  * setDefaultENV(list);
  * loads default environment variable if no environment is provided.
@@ -20,7 +14,6 @@ export function setDefaultENV(list ?: Array<EnvTuple>) {
     list.forEach((each) => {
         process.env[each.envName] = process.env[each.envName] || each.defaultValue;
     });
-    process.env['defaultAdmin'] = JSON.stringify(defaultAdmin);
 }
 function _getDefaultList(): Array<EnvTuple> {
     return [
@@ -48,6 +41,16 @@ function _getDefaultList(): Array<EnvTuple> {
             configName: 'mongodb.url',
             envName: 'MONGO_URL',
             defaultValue: 'mongodb://localhost:27017/ate_way'
+        },
+        {
+            configName: 'defaultadmin',
+            envName: 'DEFAULT_ADMIN',
+            defaultValue: 'admin'
+        },
+        {
+            configName: 'defaultadminpassword',
+            envName: 'DEFAULT_ADMIN_PASSWORD',
+            defaultValue: 'password@123'
         }
     ];
 }

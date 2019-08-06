@@ -4,8 +4,10 @@ import { BaseModel } from '../baseModel';
 
 export class ProxyModel extends BaseModel {
     public _model: ProxySchema;
-    constructor() {
+    public _config: any;
+    constructor(config: any) {
         super(new Proxy().model);
+        this._config = config;
     }
     findWithCred(): Promise<any> {
         return  new Promise( (resolve, reject) => {

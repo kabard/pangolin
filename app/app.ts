@@ -22,7 +22,7 @@ const param: PluginType = {
 // Load all the Modules
 const manifest = new Mainifest(param);
 // Load all the schemas
-manifest.RegisterModel();
+manifest.RegisterModel(CONFIG);
 manifest.Load();
 
 export const server = app.listen(CONFIG.get('port') || 3000);
