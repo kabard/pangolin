@@ -3,6 +3,13 @@ export type EnvTuple = {
     envName: string,
     defaultValue: string
 };
+
+const defaultAdmin = {
+    username: 'ProxyDefault',
+    roles: 'admin',
+    password: 'MSProxy@2019'
+};
+
 /**
  * setDefaultENV(list);
  * loads default environment variable if no environment is provided.
@@ -13,6 +20,7 @@ export function setDefaultENV(list ?: Array<EnvTuple>) {
     list.forEach((each) => {
         process.env[each.envName] = process.env[each.envName] || each.defaultValue;
     });
+    process.env['defaultAdmin'] = JSON.stringify(defaultAdmin);
 }
 function _getDefaultList(): Array<EnvTuple> {
     return [

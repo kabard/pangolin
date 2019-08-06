@@ -11,7 +11,8 @@ export class Utils  {
         return jsonwebtoken.sign({
             data: data,
             exp: Math.floor(Date.now() / 1000) + parseInt(this.params.config.get('JWT.expiretime')),
-          }, this.params.config.get('JWT.secret'));
+          }, this.secret);
+          // }, this.params.config.get('JWT.secret'));
     }
     convertJSONtoQuery(obj: any= {}) {
         let query = '';

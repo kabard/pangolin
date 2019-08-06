@@ -2,7 +2,6 @@ import { Schema, model, Document, Model } from 'mongoose';
 import { Roles, defaultRole } from './roles';
 import { hashSync } from 'bcrypt';
 
-
 declare interface IUsers extends Document {
     username: string;
     password: string;
@@ -31,8 +30,7 @@ export class Users {
                 if ( isValidPassword(content['$set'].password) ) {
                     content['$set'].password = hashSync(content['$set'].password, 5);
                 } else {
-                    console.log('error password is not valid');
-                    next ( new Error( 'password is not valid, Expecting minimum eight characters, at least one letter, one number and one special character'));
+                    next (new Error('Password not valid! Expecting minimum eight characters, at least one letter, one number and one special character.'));
                 }
             } else {
                 delete content.$set.password;
@@ -54,7 +52,7 @@ function _preSaveValidation(next: any) {
         next();
         return;
     }
-    next(new Error('password not valid,Expecting minimum eight characters, at least one letter, one number and one special character '));
+    next(new Error('Password not valid! Expecting minimum eight characters, at least one letter, one number and one special character.'));
 }
 function isValidPassword(password: string): boolean {
    const validate = new RegExp(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/);
