@@ -1,6 +1,4 @@
-// import { Context, Middleware } from 'koa';
 import { Middleware } from 'koa';
-// import { NextFunction } from 'connect';
 export interface PolicyList  {
     BasicAuthication(...args: Array<string>): Middleware;
     APIKey (...args: Array<string>): Middleware ;

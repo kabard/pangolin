@@ -4,8 +4,10 @@ import { BaseModel } from '../baseModel';
 
 export class RouteModel extends BaseModel {
     public _model: RouteSchema;
-    constructor() {
+    public _config: any;
+    constructor(config: any) {
         super(new Route().model);
+        this._config = config;
     }
     /**
      * findWithProxyAndCredential();

@@ -1,12 +1,13 @@
 
 import { Proxy, ProxySchema  } from './proxy.schema';
 import { BaseModel } from '../baseModel';
-// import { rejects } from 'assert';
 
 export class ProxyModel extends BaseModel {
     public _model: ProxySchema;
-    constructor() {
+    public _config: any;
+    constructor(config: any) {
         super(new Proxy().model);
+        this._config = config;
     }
     findWithCred(): Promise<any> {
         return  new Promise( (resolve, reject) => {
