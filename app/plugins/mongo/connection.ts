@@ -15,6 +15,6 @@ export const connect = function( url: string) {
 
 // do retry if connection fails
 function _connectWithRetry(url: string) {
-    return db.connect(url);
+    return db.connect(url, { useNewUrlParser: true });
 }
 

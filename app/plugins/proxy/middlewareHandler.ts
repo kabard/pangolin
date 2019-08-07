@@ -14,7 +14,6 @@ export class MiddlewareHandler {
         this.params = params;
     }
     DecoratorMiddleware( middlewareName: string | number, ...args: Array<string>) {
-        console.log(`decorator ${middlewareName}: ${args}`);
         if (this.params.app.policy[middlewareName]) {
             return this.params.app.policy[middlewareName](...args);
         }
