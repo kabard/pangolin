@@ -21,7 +21,6 @@ export class AuthRoutes {
                 const result = await this.params.app.models.UsersModel.getUserDetails(ctx.request.body.username);
                 if (!compareSync(ctx.request.body.password, result.password)) {
                     throw new Error('Password does not match');
-                    return;
                 }
                 result.password = undefined;
                 const token = this.params.app.utils.generateJWTToken(result);
@@ -31,9 +30,9 @@ export class AuthRoutes {
                     };
                   ctx.session[result.username] = token;
             } catch (e) {
-                console.log(e);
+                console.log(e.stack);
                 ctx.status = 406;
-                ctx.body = e;
+                ctx.body = e.stack.split('\n')[0];
             }
         });
     }
