@@ -43,6 +43,7 @@ export class ProxyApi {
         const Troute = this._getRoute(eachRoute.method);
         console.log('registering route, Base:', eachRoute.base_path, '\t remote_url:', `${eachRoute.proxyId.remote_url}${eachRoute.remote_path}`);
         Troute(eachRoute.base_path, compose(middlewareFunc) , this.middlewareHandler.ProxyRequest(eachRoute.method, `${eachRoute.proxyId.remote_url}${eachRoute.remote_path}`));
+        eachRoute.isWildCard && Troute(`${eachRoute.base_path}:param1/:param2*`, this.middlewareHandler.ProxyRequest(eachRoute.method, `${eachRoute.proxyId.remote_url}${eachRoute.remote_path}`) );
     }
     _getRoute(method: string, ...params: any) {
         switch (method) {
