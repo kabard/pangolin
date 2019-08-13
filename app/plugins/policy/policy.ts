@@ -25,7 +25,7 @@ export class Policy implements PolicyList {
     this.params = params;
     this.secret = this.params.config.get('JWT.secret');
   }
-  BasicAuthication (...args: Array<string>): Middleware {
+  BasicAuthentication (...args: Array<string>): Middleware {
     return async function (ctx: Context, next: NextFunction) {
       try {
         // add users details to context;
@@ -97,7 +97,7 @@ export class Policy implements PolicyList {
   public PolicyInfo () {
     return [
       {
-        name: 'BasicAuthication',
+        name: 'BasicAuthentication',
         arguments: ['expects username', 'expects password']
       },
       {
