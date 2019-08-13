@@ -27,7 +27,7 @@ export class MiddlewareHandler {
             await next();
         };
     }
-    ProxyRequest(method: Method, url: string) {
+    ProxyRequest(method: Method, url: any) {
         return  async (ctx: any) => {
             try {
                 const option: AxiosRequestConfig = {

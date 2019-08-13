@@ -10,7 +10,6 @@ export class CredentialsRoute {
         });
     }
     initialize () {
-        console.log('initialized ctx ');
         this._query();
         this._create();
         this._update();

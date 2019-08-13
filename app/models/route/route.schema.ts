@@ -1,6 +1,5 @@
 import { Schema, model, Document, Model } from 'mongoose';
 
-
 type policy = {
     name: string,
     arguments: Array<string>

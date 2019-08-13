@@ -9,7 +9,7 @@ declare interface ICredentials extends Document {
     apiKey ?: string;
 }
 
-export const  credentialType = ['basicAuth', 'JWT-Token', 'API-Key'];
+export const credentialType = ['BasicAuthentication', 'JWT-Token', 'API-Key'];
 
 export interface CredentialsSchema extends Model<ICredentials> {}
 
@@ -20,7 +20,7 @@ export class Credentials {
     constructor() {
         const schema =  new Schema({
             userid: {type : Schema.Types.ObjectId, ref : 'users', required: true},
-            type: { type: String, required: true, enum :  credentialType, default: 'basicAuth' },
+            type: { type: String, required: true, enum :  credentialType, default: 'BasicAuthentication' },
             apiKey: { type: String, required: false },
             creation_date: { type: Date, default: Date.now },
         });
