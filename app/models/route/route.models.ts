@@ -1,4 +1,4 @@
-import { RouteSchema, Route  } from './route.schema';
+import { RouteSchema, Route } from './route.schema';
 import { BaseModel } from '../baseModel';
 
 
@@ -14,18 +14,18 @@ export class RouteModel extends BaseModel {
      * provide routes with proxy and credential documents included
      */
     findWithProxyAndCredential(): Promise<any> {
-        return new Promise( (resolve, reject) => {
-        this._model.find().populate({path: 'proxyId', populate: {path: 'credential'}}).exec( function(err, document) {
+        return new Promise((resolve, reject) => {
+            this._model.find().populate({ path: 'proxyId', populate: { path: 'credential' } }).exec(function (err, document) {
                 if (err) {
                     reject(err);
                 }
-                resolve( document);
+                resolve(document);
             });
         });
     }
     findByIdAndUpdate(id: string, doc: any): Promise<any> {
-        return new Promise( (resolve, reject) => {
-            this._model.findByIdAndUpdate({_id: id}, doc, {new: true}, function(err, document) {
+        return new Promise((resolve, reject) => {
+            this._model.findByIdAndUpdate({ _id: id }, doc, { new: true }, function (err, document) {
                 if (err) {
                     reject(err);
                 }
