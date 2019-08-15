@@ -9,7 +9,8 @@ declare interface ICredentials extends Document {
     apiKey ?: string;
 }
 
-export const  credentialType = ['BasicAuthentication', 'JWT-Token', 'API-Key'];
+
+export const credentialType = ['BasicAuthentication', 'JWT-Token', 'API-Key'];
 
 export interface CredentialsSchema extends Model<ICredentials> {}
 
