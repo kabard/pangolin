@@ -33,14 +33,8 @@ export class MiddlewareHandler {
                 const option: AxiosRequestConfig = {
                     method: method, url: url
                 };
-                let _str = '';
-                Object.keys(ctx.params).forEach( (key: string ) => {
-                    if ( ctx.params[key] && ctx.params[key].length > 0) {
-                        _str += '/' + ctx.params[key];
-                    }
-                });
-                option.url = (`${option.url}${_str}`).replace(/(?<!http:|https:)\/\//g, '/');
-                option.url += ctx.request.query ?  this.params.app.utils.convertJSONtoQuery(ctx.request.query) : undefined;
+                option.url = ctx.convertParamsToURL(option.url, ctx.params);
+                option.url += ctx.request.query ?  ctx.convertJSONtoQuery(ctx.request.query) : undefined;
                 option.data = ctx.request.body ? ctx.request.body : undefined;
                 const response = await axios(option);
                 ctx.response.body = response.data;

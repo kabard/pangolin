@@ -4,6 +4,7 @@ export interface PolicyList  {
     APIKey (...args: Array<string>): Middleware ;
     JWTAuth (...args: Array<string>): Middleware ;
     Authorization(role: Array<string>): Middleware;
+    Cache(...args: Array<string>): Middleware;
 }
 
 

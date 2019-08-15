@@ -80,13 +80,29 @@ export class Policy implements PolicyList {
           ctx.status = 401;
           ctx.body = 'you are not authorized';
         } else {
-          console.log('inside else part of Auth');
           await next();
         }
       } catch (e) {
-        console.log('inside catch part of Auth', e);
+        console.log('Failed to authorized', e);
         ctx.status = 401;
         ctx.body = e;
+      }
+    };
+  }
+  Cache (...args: Array <string>): Middleware {
+    return async function (ctx: Context, next: NextFunction) {
+      let url = ctx.URL.pathname;
+      url += ctx.request.query ?  ctx.convertJSONtoQuery(ctx.request.query) : undefined;
+      const urlBase64 = Buffer.from(url).toString('base64');
+      const cachedContent = ctx.session[urlBase64];
+      ctx.session['hits'] = (ctx.session['hits'] || 0) + 1;
+      if ( cachedContent ) {
+        ctx.body = cachedContent;
+        return;
+      } else {
+        await next();
+        ctx.session[urlBase64] = ctx.body;
+        ctx.session['miss'] = (ctx.session['miss'] || 0) + 1;
       }
     };
   }
@@ -107,6 +123,10 @@ export class Policy implements PolicyList {
       {
         name: 'Authorization',
         arguments: ['expects existing roles. can pass multiple roles ']
+      },
+      {
+        name: 'Cache',
+        arguments: []
       }
     ];
   }

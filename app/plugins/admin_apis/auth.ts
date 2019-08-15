@@ -23,7 +23,7 @@ export class AuthRoutes {
                     throw new Error('Password does not match');
                 }
                 result.password = undefined;
-                const token = this.params.app.utils.generateJWTToken(result);
+                const token = ctx.generateJWTToken(result);
                   ctx.body = {
                       token: token,
                       username: result.username
@@ -39,7 +39,7 @@ export class AuthRoutes {
     _refresh() {
         this.router.get('/jwt/refresh', this.params.app.policy.JWTAuth(), this.params.app.policy.Authorization(['admin']), async (ctx: any) => {
             try {
-                const token = this.params.app.utils.generateJWTToken(ctx.state.user.data);
+                const token = ctx.generateJWTToken(ctx.state.user.data);
                 ctx.body = {
                     token: token,
                     username: ctx.state.user.data.username

@@ -20,4 +20,13 @@ export class Utils  {
         });
         return query;
     }
+    convertParamsToURL(url: string, params: any= {}) {
+        let _str = '';
+        Object.keys(params).forEach( (key: string ) => {
+            if ( params[key] && params[key].length > 0) {
+                _str += '/' + params[key];
+            }
+        });
+        return (`${url}${_str}`).replace(/(?<!http:|https:)\/\//g, '/');
+    }
 }
