@@ -29,7 +29,7 @@ export class Route {
             isWildCard: {type: Boolean, required: true},
             creation_date: { type: Date, default: Date.now },
             proxyId: {type : Schema.Types.ObjectId, ref : 'proxies', required: true},
-            method: {type: String, required: true, enum: ['get', 'post', 'post', 'patch', 'delete']}
+            method: {type: String, required: true, enum: ['get', 'post', 'put', 'patch', 'delete']}
         });
 
         this._model = model<IRoute>('routes', schema);
