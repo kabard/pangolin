@@ -8,4 +8,5 @@ export const initWebApp = function(params: PluginType) {
     params.app.context['generateJWTToken'] = utils.generateJWTToken.bind(utils);
     params.app.context['convertJSONtoQuery'] = utils.convertJSONtoQuery.bind(utils);
     params.app.context['convertParamsToURL'] = utils.convertParamsToURL.bind(utils);
+    params.app.context['UniqueIdForURL'] = utils.UniqueIdForURL.bind(utils);
 };

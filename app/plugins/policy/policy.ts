@@ -91,18 +91,16 @@ export class Policy implements PolicyList {
   }
   Cache (...args: Array <string>): Middleware {
     return async function (ctx: Context, next: NextFunction) {
-      let url = ctx.URL.pathname;
-      url += ctx.request.query ?  ctx.convertJSONtoQuery(ctx.request.query) : undefined;
-      const urlBase64 = Buffer.from(url).toString('base64');
+      const urlBase64 = ctx.UniqueIdForURL(ctx.URL.pathname, ctx.request.query );
       const cachedContent = ctx.session[urlBase64];
-      ctx.session['hits'] = (ctx.session['hits'] || 0) + 1;
       if ( cachedContent ) {
         ctx.body = cachedContent;
+        ctx.set('X-cache', 'hit');
         return;
       } else {
         await next();
         ctx.session[urlBase64] = ctx.body;
-        ctx.session['miss'] = (ctx.session['miss'] || 0) + 1;
+        ctx.set('X-cache', 'miss');
       }
     };
   }

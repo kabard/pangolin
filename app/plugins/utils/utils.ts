@@ -29,4 +29,9 @@ export class Utils  {
         });
         return (`${url}${_str}`).replace(/(?<!http:|https:)\/\//g, '/');
     }
+    UniqueIdForURL(url: string, query: string) {
+        url += query ?  this.convertJSONtoQuery(query) : undefined;
+        const urlBase64 = Buffer.from(url).toString('base64');
+        return urlBase64;
+    }
 }
