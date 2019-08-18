@@ -29,4 +29,20 @@ export class Utils  {
         });
         return (`${url}${_str}`).replace(/(?<!http:|https:)\/\//g, '/');
     }
+    UniqueIdForURL(url: string, query: string) {
+        url += query ?  this.convertJSONtoQuery(query) : undefined;
+        const urlBase64 = Buffer.from(url).toString('base64');
+        return urlBase64;
+    }
+}
+/**
+ * ServeFromCache();
+ * attached to ctx object.
+ * add condition to check if object should be served from  cache or not
+ */
+export function ServeFromCache(): boolean {
+    if ( this.request.header['X-cache-ignore']) {
+        return false;
+    }
+    return true;
 }

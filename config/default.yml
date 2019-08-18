@@ -9,6 +9,7 @@ plugins:
   - ./plugins/proxy
   - ./plugins/utils
   - ./plugins/admin_apis
+  - ./plugins/monitor
 
 port: 3000
 
