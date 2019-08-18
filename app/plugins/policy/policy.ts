@@ -92,14 +92,34 @@ export class Policy implements PolicyList {
   Cache (...args: Array <string>): Middleware {
     return async function (ctx: Context, next: NextFunction) {
       const urlBase64 = ctx.UniqueIdForURL(ctx.URL.pathname, ctx.request.query );
-      const cachedContent = ctx.session[urlBase64];
-      if ( cachedContent ) {
-        ctx.body = cachedContent;
-        ctx.set('X-cache', 'hit');
-        return;
-      } else {
+      try {
+        const cachedContent = await ctx.redis.getCachedContent(urlBase64);
+        if ( (cachedContent || {}).body && ctx.serveFromCache() ) {
+
+          ctx.body = JSON.parse(cachedContent.body);
+          ctx.response.status = parseInt(cachedContent.status);
+          ctx.set('X-cache', 'hit');
+          return;
+        } else {
+          throw 'cache miss';
+        }
+      } catch (err) {
         await next();
-        ctx.session[urlBase64] = ctx.body;
+        // const body = typeof ctx.body === 'object' ? JSON.stringify(ctx.body) : ctx.body;
+        const pipeline = ctx.redis.GetConnection().pipeline()
+            .set(`${urlBase64}:body`, JSON.stringify(ctx.body))
+            .set(`${urlBase64}:status`, ctx.response.status.toString());
+        // cache failure cases for shorter time.
+        if (ctx.response.status > 399 ) {
+            pipeline
+            .expire(`${urlBase64}:body`, 20)
+            .expire(`${urlBase64}:status`, 20)
+            .exec();
+        } else {
+          // don't early expire;
+          pipeline.exec();
+        }
+        // set cache miss to header
         ctx.set('X-cache', 'miss');
       }
     };

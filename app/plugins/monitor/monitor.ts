@@ -15,17 +15,15 @@ export class Monitor {
             const start = process.hrtime();
             await next ();
             const elapsed = process.hrtime(start)[1] / 1000000; // in milisecond
-            const uniqueID =  ctx.UniqueIdForURL(ctx.URL.pathname, ctx.request.query );
+            const uniqueId =  ctx.UniqueIdForURL(ctx.URL.pathname, ctx.request.query );
             try {
-                ctx.redis.multi()
-                    .incr(ctx.response.get('X-cache') || 'miss')
-                    .incr(`${uniqueID}:${ctx.response.status}`)
-                    .incr(`${uniqueID}:${ctx.response.get('X-cache')}`)
-                    .append(`${uniqueID}:responseTime`, JSON.stringify({time: new Date(), response: elapsed})).exec(function(err: any, result: any){
-                        if (!err) {
-                            console.log(`ERROR: failed to store in Redis`, err);
-                        }
-                    });
+                await ctx.redis.WriteAllDetails({
+                    XCacheType: ctx.response.get('X-cache') || 'miss',
+                    uniqueId: uniqueId,
+                    time: new Date(),
+                    elapsed: elapsed,
+                    responseStatus: ctx.response.status
+                });
             } catch (expection) {
                 console.log(expection);
             }
