@@ -31,6 +31,7 @@ export class ProxyApi {
         const middlewareFunc: Array<Middleware> = [this.middlewareHandler.addCustomDetailsToCtx([
             { key: 'customMeta', value: eachRoute.proxyId.credential }
         ]), this.middlewareHandler.DecoratorMiddleware('AnalyticsRedis', ...[] )];
+
         // Add the Policies defined in Routes first
         eachRoute.policy.forEach((eachPolicy: any) => {
             middlewareFunc.push(this.middlewareHandler.DecoratorMiddleware(eachPolicy.name, ...eachPolicy.arguments));

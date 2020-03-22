@@ -37,9 +37,11 @@ export class MiddlewareHandler {
                 option.url += ctx.request.query ?  ctx.convertJSONtoQuery(ctx.request.query) : undefined;
                 option.data = ctx.request.body ? ctx.request.body : undefined;
                 const response = await axios(option);
+                ctx.response.status = response.status;
                 ctx.response.body = response.data;
             }
             catch (error) {
+                ctx.response.status = error.response.status;
                 ctx.response.body = error.toString();
             }
         };

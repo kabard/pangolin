@@ -29,5 +29,5 @@ export const initWebApp = function(params: PluginType) {
       }, params.app));
     //  a seperate client to store analytical data. As Koa-redis client does not provide all feature so used ioredis connection
     // move all redis logic to ioredis class.
-    params.app.context['redis'] = new IoRedis(option).GETTER();
+    params.app.context['redis'] = new IoRedis(option);
 };
