@@ -35,7 +35,7 @@ function _getDefaultList(): Array<EnvTuple> {
         {
             configName: 'redis.host',
             envName: 'REDIS_HOST',
-            defaultValue: '127.0.0.1:6379'
+            defaultValue: '127.0.0.1'
         },
         {
             configName: 'mongodb.url',

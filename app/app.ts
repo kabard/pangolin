@@ -1,13 +1,16 @@
 import * as Koa from 'koa';
 
-
+const mount = require('koa-mount');
+const serve = require('koa-static');
 import { Mainifest } from './manifest';
 import { PluginType } from './plugin';
 import { routes } from './routes';
 import { setDefaultENV } from './setEnv';
+
 const app = new Koa();
 
-app.use(routes);
+app.use(mount('/admin', routes));
+app.use(mount('/dashboard', serve('admin_dashboard/dist')));
 // add default configs
 setDefaultENV();
 
