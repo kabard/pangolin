@@ -19,7 +19,6 @@ export class Analytics {
             try {
                 const result = await ctx.redis.getAnalyticsDetail();
                 console.log(result);
-                // const result = await this.params.app.models.CredentialModel.find();
                 ctx.body = result;
             } catch (e) {
                 ctx.status = 406;

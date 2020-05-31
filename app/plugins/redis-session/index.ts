@@ -8,12 +8,11 @@ import { IoRedis } from './ioredis';
 export const initWebApp = function(params: PluginType) {
     const redisConf: any = params.config.get('Redis');
     // add redis cluster configuration
-    // const nodes = redisConf.nodes.map( (node: string ) => { return { host: node.split(':')[0], port: node.split(':')[1] }; });
     params.app.keys = ['secret', 'key'];
     const option = {
         // db: 'monitor',
-        host: redisConf.host || '127.0.0.1',
-        port: redisConf.port || 6379,
+        host: redisConf.host,
+        port: redisConf.port,
         dropBufferSupport: true,
         connectTimeout: 10000,
     };
@@ -23,8 +22,8 @@ export const initWebApp = function(params: PluginType) {
             maxAge: 21600000,
             // isRedisCluster: true,
             // nodes: nodes,
-            host: option.host || '127.0.0.1',
-            port: option.port || 6379
+            host: option.host,
+            port: option.port
         })
       }, params.app));
     //  a seperate client to store analytical data. As Koa-redis client does not provide all feature so used ioredis connection

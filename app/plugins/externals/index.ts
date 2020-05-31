@@ -13,4 +13,3 @@ export const initWebApp = function(params: PluginType) {
 
 
 };
-

@@ -49,17 +49,20 @@ export class IoRedis {
                 data.forEach((key: string) => {
                     operations.push(['get', key]);
                 });
-                const pipeline = this.redisConnection.pipeline(operations);
-                // data.forEach((key: string) => {
-                //     pipeline = pipeline.get( key);
-                // });
-                pipeline.exec().then( (result: any) => {
-                    result = result.map( (eachResult: Array<string>, index: number) => {
-                        eachResult[0] = data[index];
-                        return eachResult;
+
+                this.redisConnection.mget(data, (err: any, values: any) => {
+                    if (err) {
+                        reject(err);
+                        return;
+                    }
+                    console.log(`mget:`, values);
+                    values = values.map( (v: any, i: number) => {
+                        const obj: any = {};
+                        obj[data[i]] = v;
+                        return obj;
                     });
-                    resolve(result);
-                }).catch( (err: any ) => { reject(err); });
+                    resolve(values);
+                });
             });
         } );
     }

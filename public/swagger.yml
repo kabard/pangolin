@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: "Add a Auth layer above API calls"
   version: "1.0.0"
-  title: "MachineSense API Slayer"
+  title: "API Slayer"
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"

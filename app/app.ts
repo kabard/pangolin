@@ -11,6 +11,7 @@ const app = new Koa();
 
 app.use(mount('/admin', routes));
 app.use(mount('/dashboard', serve('admin_dashboard/dist')));
+
 // add default configs
 setDefaultENV();
 
@@ -28,7 +29,7 @@ const manifest = new Mainifest(param);
 manifest.RegisterModel(CONFIG);
 manifest.Load();
 
-export const server = app.listen(CONFIG.get('port') || 3000);
+export const server = app.listen(CONFIG.get('port'));
 
 
-console.log(`Server running on port ${CONFIG.get('port') || 3000}`);
+console.log(`Server running on port ${CONFIG.get('port')}`);
