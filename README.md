@@ -3,12 +3,12 @@
 [![Build Status](https://travis-ci.org/ddimaria/koa-typescript-starter.svg?branch=develop)](https://travis-ci.org/ddimaria/koa-typescript-starter)
 [![Coverage Status](https://coveralls.io/repos/github/ddimaria/koa-typescript-starter/badge.svg?branch=develop)](https://coveralls.io/github/ddimaria/koa-typescript-starter?branch=develop)
 
-Pangolin is a api-proxy layer build with KOA2 and typescript.
+Pangolin is an api-proxy layer build with KOA2 and typescript.
 
 ## What pangolin does?
 - Proxy for the multiple back-end service
 - API versioning
-- plugable polices - add policies on each APIs, e.g. Authentication, caching, 
+- plugable polices - add policies on each APIs, e.g. Authentication, caching.
 - analytics on API calls
 - Role based Access control on APIs
 
@@ -20,7 +20,7 @@ Pangolin is a api-proxy layer build with KOA2 and typescript.
 - Customization dashbaord for analytics and luece search for analytics
 - webhook on api calls.
 - cli for admin operation and configuration changes.
-- genrator for plugin and polices. 
+- genrator for plugin and polices.
 
 ## Installation
 run the docker-compose to spawn up the resources.
@@ -28,10 +28,12 @@ run the docker-compose to spawn up the resources.
 docker-compose up
 ```
 
+
 ## Prerequisites
 * Node.js (8+): recommend using [nvm](https://github.com/creationix/nvm)
 * Docker (if building a docker image) https://www.docker.com/docker-mac
 
+## [pangolin admin dashboard] (https://github.com/kabard/pangolin_dashboard)
 
 ## API documentation
 For a swagger version of this documention, see http://localhost:3000/swagger (requires this server to be running).
