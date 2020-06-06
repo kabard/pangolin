@@ -1,4 +1,4 @@
-# Proxy Proxy Server
+# Pangolin Proxy Server
 
 [![Build Status](https://travis-ci.org/ddimaria/koa-typescript-starter.svg?branch=develop)](https://travis-ci.org/ddimaria/koa-typescript-starter)
 [![Coverage Status](https://coveralls.io/repos/github/ddimaria/koa-typescript-starter/badge.svg?branch=develop)](https://coveralls.io/github/ddimaria/koa-typescript-starter?branch=develop)
