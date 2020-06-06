@@ -33,7 +33,7 @@ docker-compose up
 * Node.js (8+): recommend using [nvm](https://github.com/creationix/nvm)
 * Docker (if building a docker image) https://www.docker.com/docker-mac
 
-## [pangolin admin dashboard] (https://github.com/kabard/pangolin_dashboard)
+## [pangolin admin dashboard](https://github.com/kabard/pangolin_dashboard)
 
 ## API documentation
 For a swagger version of this documention, see http://localhost:3000/swagger (requires this server to be running).
