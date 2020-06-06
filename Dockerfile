@@ -4,7 +4,7 @@ WORKDIR /server
 
 COPY . /server
 
-RUN cd admin_dashboard && rm -rf node_modules && yarn install && yarn build
+RUN cd pangolin_dashboard && rm -rf node_modules && yarn install && yarn build
 
 RUN cd ../
 
