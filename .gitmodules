@@ -1,0 +1,3 @@
+[submodule "pangolin_dashboard"]
+	path = pangolin_dashboard
+	url = git@github.com:kabard/pangolin_dashboard.git
