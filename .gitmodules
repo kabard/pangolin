@@ -1,3 +1,0 @@
-[submodule "admin_dashboard"]
-	path = admin_dashboard
-	url = git@github.com:anandpathak/admin_dashboard.git
