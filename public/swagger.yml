@@ -1,8 +1,8 @@
 swagger: "2.0"
 info:
-  description: "Add a Auth layer above API calls"
+  description: "Proxy service for Rest APIs"
   version: "1.0.0"
-  title: "API Slayer"
+  title: "Pangolin API server"
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
